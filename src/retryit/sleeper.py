@@ -1,7 +1,7 @@
-"""Sleeping time calculator functions.
+"""Sleeping time calculator functions for the decorator.
 
 Each function takes a number of initial configurations as arguments,
-and returns a function that can be passed to validators.
+and returns a function that can be passed to the decorator.
 """
 
 
