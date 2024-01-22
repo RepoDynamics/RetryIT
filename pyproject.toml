@@ -17,6 +17,6 @@ namespaces = true
 # ----------------------------------------- Project Metadata -------------------------------------
 #
 [project]
-version = "0.0.0.dev1"
+version = "0.0.0.dev2"
 name = "RetryIT"
 requires-python = ">=3.9"
