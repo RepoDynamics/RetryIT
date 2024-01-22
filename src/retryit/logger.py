@@ -1,3 +1,6 @@
+"""Logger functions for the decorator."""
+
+
 from typing import Any, Callable
 
 
