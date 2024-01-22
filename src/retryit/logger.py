@@ -6,7 +6,7 @@ from typing import Any, Callable
 
 def full(
     log_function: Callable,
-    title: str = "Try function '{function.__name__}' (attempt {count_tries})",
+    title: str = "Try function '{function.__qualname__}' (attempt {count_tries})",
     details: tuple[str, ...] | list[str] = (
         "Function: {function}",
         "Sleeper Function: {sleeper}",
