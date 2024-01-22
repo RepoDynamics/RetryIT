@@ -1,7 +1,7 @@
 from typing import Any, Callable, Type
 
 from retryit import sleeper
-from retryit.exception import ReturnValueError
+from retryit.exception import RetryError
 
 
 class DefaultValidator:
@@ -25,30 +25,25 @@ class DefaultValidator:
         self._next_sleep_seconds = 0
         self._value = None
         self._exception = None
+        self._history = []
         return
 
     def stop(self, value: Any, exception: Exception | None) -> bool:
         self._count_tries += 1
         self._value = value
         self._exception = exception
-
+        self._history.append((exception is not None, exception or value))
         if exception:
             if not self._exceptions_to_catch or not isinstance(exception, self._exceptions_to_catch):
                 return True
-            next_sleep_seconds = self._sleeper(self._count_tries, self._current_total_sleep_seconds)
-            if next_sleep_seconds == 0:
+            if self._process():
                 return True
-            self._next_sleep_seconds = next_sleep_seconds
-            self._current_total_sleep_seconds += next_sleep_seconds
             return False
         if self._value_verifier:
             if self._value_verifier(value):
                 return True
-            next_sleep_seconds = self._sleeper(self._count_tries, self._current_total_sleep_seconds)
-            if next_sleep_seconds == 0:
+            if self._process():
                 return True
-            self._next_sleep_seconds = next_sleep_seconds
-            self._current_total_sleep_seconds += next_sleep_seconds
             return False
         return True
 
@@ -63,5 +58,18 @@ class DefaultValidator:
     @property
     def value(self) -> Any:
         return self._value
+
+    def _process(self):
+        next_sleep_seconds = self._sleeper(self._count_tries, self._current_total_sleep_seconds)
+        if next_sleep_seconds == 0:
+            self._exception = RetryError(
+                count_tries=self._count_tries,
+                total_sleep_seconds=self._current_total_sleep_seconds,
+                history=self._history
+            )
+            return True
+        self._next_sleep_seconds = next_sleep_seconds
+        self._current_total_sleep_seconds += next_sleep_seconds
+        return False
 
 
