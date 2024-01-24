@@ -21,17 +21,17 @@ def full(
         "Return Handler Response: {return_handler_response}",
     ),
     case_exception_without_handler: tuple[Any, str] = (
-        "error",
+        "fail",
         "The function raised an exception while no exception handler was provided; "
         "the exception will be raised."
     ),
     case_exception_rejected: tuple[Any, str] = (
-        "error",
+        "fail",
         "The function raised an exception that was rejected by the exception handler; "
         "the exception will be raised."
     ),
     case_exception_accepted_and_timeout: tuple[Any, str] = (
-        "error",
+        "fail",
         "The function raised an exception that was suppressed by the exception handler, "
         "but the retry limit has been reached; a RetryError exception will be raised."
     ),
@@ -41,17 +41,17 @@ def full(
         "the function will be retried in {next_sleep_seconds} seconds."
     ),
     case_return_without_handler: tuple[Any, str] = (
-        "success",
+        "pass",
         "The function executed successfully while no return handler was provided; "
         "the return value will be returned."
     ),
     case_return_accepted: tuple[Any, str] = (
-        "success",
+        "pass",
         "The function executed successfully and the return value was accepted by the return handler; "
         "the return value will be returned."
     ),
     case_return_rejected_and_timeout: tuple[Any, str] = (
-        "error",
+        "fail",
         "The function executed successfully, but the return value was rejected by the return handler "
         "and the retry limit has been reached; a RetryError exception will be raised."
     ),
